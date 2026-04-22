@@ -19,7 +19,7 @@ from collections import Counter
 
 基于pytorch框架编写模型训练
 实现一个自行构造的找规律(机器学习)任务
-规律：x是一个5维向量，如果第1个数>第5个数，则为正样本，反之为负样本
+规律：x是一个5维向量，尝试完成一个多分类任务的训练:哪一维数字最大就属于第几类
 
 """
 
@@ -54,7 +54,6 @@ def build_sample():
 
 
 # 随机生成一批样本
-# 正负样本均匀生成
 def build_dataset(total_sample_num):
     X = []
     Y = []
