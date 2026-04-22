@@ -10,8 +10,8 @@ if __name__=="__main__":
     labels = torch.max(data, dim=1, keepdim=False).indices
 
     #定义训练参数
-    epochs = 300
-    batch_size = 10
+    epochs = 1000
+    batch_size = 32
     #创建网络
     net = MaxNet(5,5)
     optimize = torch.optim.Adam(net.parameters(), lr=0.01)
@@ -20,8 +20,8 @@ if __name__=="__main__":
     net.train()
     for epoch in range(epochs):
         for b in range(0, data_size, batch_size):
-            last = (b + 1) * batch_size
-            if last > data_size:
+            last = b + batch_size
+            if last >= data_size:
                 last = -1
             x = data[b:last,:]
             y = labels[b:last]
