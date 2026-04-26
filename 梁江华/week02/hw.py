@@ -133,7 +133,7 @@ def main():
         acc = evaluate(model, nn.functional.cross_entropy)  # 测试本轮模型结果，并传入交叉熵函数
         log.append([acc, float(np.mean(watch_loss))])
     # 保存模型
-    torch.save(model.state_dict(), "model.bin")
+    torch.save(model.state_dict(), "../week01/model.bin")
     # 画图
     print(log)
     plt.plot(range(len(log)), [l[0] for l in log], label="acc")  # 画acc曲线
@@ -141,7 +141,7 @@ def main():
     plt.legend()
     plt.show()
     return
-    torch.save(model.state_dict(), "model.bin")
+    torch.save(model.state_dict(), "../week01/model.bin")
     # 画图
     print(log)
     plt.plot(range(len(log)), [l[0] for l in log], label="acc")  # 画acc曲线
@@ -188,4 +188,4 @@ if __name__ == "__main__":
                 [0.349776, 0.59416669, 0.2579291, 0.81567412, 0.1358894],
                 [0.349776, 0.59416669, 0.2579291, 0.1567412, 0.8894],
                 ]
-    predict("model.bin", test_vec)
+    predict("../week01/model.bin", test_vec)
