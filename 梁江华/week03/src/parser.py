@@ -7,25 +7,25 @@ def parameter_parser():
      parser.add_argument("--epochs",
                                 dest = "epochs",
                                 type = int,
-                                default = 50,
-                         help = "Number of gradient descent iterations. Default is 50.")
+                                default = 100,
+                         help = "Number of gradient descent iterations. Default is 100.")
 
      parser.add_argument("--learning_rate",
                                 dest = "learning_rate",
                                 type = float,
-                                default = 0.001,
-                         help = "Gradient descent learning rate. Default is 0.001.")
+                                default = 0.0005,
+                         help = "Gradient descent learning rate. Default is 0.0005.")
 
      parser.add_argument("--hidden_dim",
                                 dest = "hidden_dim",
                                 type = int,
-                                default = 128,
-                         help = "Number of neurons by hidden layer. Default is 128.")
+                                default = 64,
+                         help = "Number of neurons by hidden layer. Default is 64.")
 
      parser.add_argument("--lstm_layers",
                                 dest = "lstm_layers",
                                 type = int,
-                                default = 2,
+                                default = 1,
                      help = "Number of LSTM layers")
 
      parser.add_argument("--batch_size",
@@ -49,7 +49,7 @@ def parameter_parser():
      parser.add_argument("--max_words",
                                 dest = "max_words",
                                  type = int,
-                                default = 5000,
+                                default = 2000,
                          help = "Maximum number of words in the dictionary")
 
      parser.add_argument("--data_path",

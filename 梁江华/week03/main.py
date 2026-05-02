@@ -80,8 +80,15 @@ class Execute:
         self.loader_training = DataLoader(training_set, batch_size=self.batch_size, shuffle=True)
         self.loader_test = DataLoader(test_set)
 
-        optimizer = optim.Adam(self.model.parameters(), lr=self.args.learning_rate, weight_decay=1e-5)
-        scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.5)
+        optimizer = optim.Adam(self.model.parameters(), lr=self.args.learning_rate, weight_decay=1e-4)
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, mode='max', factor=0.5, patience=5, min_lr=1e-6, verbose=True
+        )
+
+        best_test_accuracy = 0.0
+        best_model_state = None
+        patience_counter = 0
+        early_stop_patience = 15
 
         for epoch in range(self.args.epochs):
 
@@ -114,14 +121,29 @@ class Execute:
                 train_predictions += list(y_pred.squeeze(1).detach().cpu().numpy())
                 train_labels += list(y.squeeze(1).detach().cpu().numpy())
 
-            scheduler.step()
-
             test_predictions = self.evaluation()
 
             train_accuracy = self.calculate_accuracy(train_labels, train_predictions)
             test_accuracy = self.calculate_accuracy(self.y_test, test_predictions)
 
             print("Epoch: %d, loss: %.5f, Train accuracy: %.5f, Test accuracy: %.5f" % (epoch+1, epoch_loss / num_batches, train_accuracy, test_accuracy))
+
+            scheduler.step(test_accuracy)
+
+            if test_accuracy > best_test_accuracy:
+                best_test_accuracy = test_accuracy
+                best_model_state = {k: v.cpu().clone() for k, v in self.model.state_dict().items()}
+                patience_counter = 0
+            else:
+                patience_counter += 1
+
+            if patience_counter >= early_stop_patience:
+                print("Early stopping at epoch %d (best test accuracy: %.5f)" % (epoch+1, best_test_accuracy))
+                break
+
+        if best_model_state is not None:
+            self.model.load_state_dict(best_model_state)
+            print("Loaded best model with test accuracy: %.5f" % best_test_accuracy)
 
     def evaluation(self):
 

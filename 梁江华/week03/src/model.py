@@ -12,7 +12,8 @@ class TweetClassifier(nn.Module):
 		self.input_size = args.max_words
 		self.bidirectional = True
 		
-		self.dropout = nn.Dropout(0.5)
+		self.embedding_dropout = nn.Dropout(0.3)
+		self.dropout = nn.Dropout(0.7)
 		self.embedding = nn.Embedding(self.input_size, self.hidden_dim, padding_idx=0)
 		self.lstm = nn.LSTM(
 			input_size=self.hidden_dim,
@@ -22,8 +23,8 @@ class TweetClassifier(nn.Module):
 			bidirectional=self.bidirectional,
 		)
 		lstm_output_dim = self.hidden_dim * 2  # bidirectional
-		self.fc1 = nn.Linear(lstm_output_dim, 128)
-		self.fc2 = nn.Linear(128, 1)
+		self.fc1 = nn.Linear(lstm_output_dim, self.hidden_dim)
+		self.fc2 = nn.Linear(self.hidden_dim, 1)
 		
 	def forward(self, x):
 		device = x.device
@@ -34,6 +35,7 @@ class TweetClassifier(nn.Module):
 		c = torch.zeros(self.LSTM_layers * num_directions, batch_size, self.hidden_dim, device=device)
 
 		out = self.embedding(x)
+		out = self.embedding_dropout(out)
 		out, _ = self.lstm(out, (h, c))
 		out = out[:, -1, :]  # last timestep output
 		out = self.dropout(out)
