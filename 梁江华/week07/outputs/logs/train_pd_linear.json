@@ -1,0 +1,23 @@
+[
+  {
+    "epoch": 1,
+    "train_loss": 0.163427,
+    "val_loss": 0.02093,
+    "val_entity_f1": 0.933787,
+    "elapsed_s": 529.7
+  },
+  {
+    "epoch": 2,
+    "train_loss": 0.018209,
+    "val_loss": 0.016106,
+    "val_entity_f1": 0.945696,
+    "elapsed_s": 539.8
+  },
+  {
+    "epoch": 3,
+    "train_loss": 0.008406,
+    "val_loss": 0.01724,
+    "val_entity_f1": 0.951679,
+    "elapsed_s": 561.9
+  }
+]
