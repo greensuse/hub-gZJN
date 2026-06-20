@@ -36,7 +36,7 @@ DATA_DIR = ROOT / "data" / "peoples_daily"
 LOG_DIR = ROOT / "outputs" / "logs"
 
 # 可选：本地开发时可在此填写默认 API Key；提交代码前建议清空。
-DEFAULT_DEEPSEEK_API_KEY = "sk-1119f589ed62422aabd3a5d83452ef3a"
+DEFAULT_DEEPSEEK_API_KEY = "sk-xxx"
 
 ENTITY_TYPE_ZH = {
     "PER": "人名",

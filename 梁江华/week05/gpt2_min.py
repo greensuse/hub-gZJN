@@ -7,11 +7,11 @@ import torch.nn.functional as F
 
 @dataclass
 class GPTConfig:
-    vocab_size: int
-    block_size: int
-    n_layer: int = 12
-    n_head: int = 12
-    n_embd: int = 768
+    vocab_size: int        # unique words the model knows
+    block_size: int        # max sequence length (context window)
+    n_layer: int = 12      # number of transformer blocks to stack
+    n_head: int = 12       # number of attention heads
+    n_embd: int = 768      # embedding dimension
     dropout: float = 0.1
 
 class CausalSelfAttention(nn.Module):
@@ -37,6 +37,7 @@ class CausalSelfAttention(nn.Module):
         y = att @ v
         y = y.transpose(1, 2).contiguous().view(B, T, C)
         return self.resid_drop(self.c_proj(y))
+
 
 class MLP(nn.Module):
     def __init__(self, config: GPTConfig):
@@ -64,7 +65,7 @@ class GPT2(nn.Module):
         super().__init__()
         self.config = config
         self.wte = nn.Embedding(config.vocab_size, config.n_embd)
-        self.wpe = nn.Embedding(config.block_size, config.n_embd)
+        self.wpe = nn.Embedding(config.block_size, config.n_embd)                    #position embedding
         self.drop = nn.Dropout(config.dropout)
         self.h = nn.ModuleList([Block(config) for _ in range(config.n_layer)])
         self.ln_f = nn.LayerNorm(config.n_embd)
